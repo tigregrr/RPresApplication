@@ -1,0 +1,75 @@
+
+========================================================
+<span style="color:white; font-size:2em;">
+APU Benchmark Dashboard 
+</span>
+<br/>
+### Luis Urbina
+### August 20, 2015
+<br/>
+### RPres Project
+### Development Data Product Course
+<br/>
+https://luisurbina.shinyapps.io/shiny02
+
+
+Introduction 
+========================================================
+<span style="color:dimgray; font-size:.85em;">
+The AMD Accelerated Processing Unit (APU) is a series of 64-bit microprocessors from AMD designed to act as a CPU and graphics accelerator
+(GPU) on a single chip. AMD and Intel are the largest APU producers in the
+world. Their products are used in Desktop and Laptop devices, and customized units are also used in the Sony PlayStation and the Xbox video games.
+</span>
+
+<span style="color:dimgray; font-size:.85em;">
+The APU performance is determined through diverse Performance Test benchmarks. This presentation shows the benchmark scores for both the 
+AMD and the Intel APUs. The data has been generated in the AMD Marketing Laboratory at Austin, Texas, and for confidentiality reasons, the score values has been changed.
+</span>
+
+
+Input Data Table 
+===================================
+<span style="color:dimgray; font-size:.85em;">
+The table shows the AMD APU score for several benchmarks such as 3DMark 
+Windows 8.1 and PCMark. 
+</span>
+```{r, echo=FALSE, cache=FALSE}
+score <- read.csv('data/score.csv', header = TRUE, sep = ',')
+score[,c(1:3)]
+```
+
+
+Performance Graphics
+========================================================
+<span style="color:dimgray; font-size:.85em;">
+The graphics shows the performance for diferent APU models according 
+to several benchmarks suchs as 3DMark Windows 8 and PCMark
+</span>
+```{r, echo=FALSE}
+library(ggplot2)
+perf <- read.csv('data/performance.csv', header = TRUE, sep = ',')
+perf$APU <- as.factor(perf$APU)
+p2 <- ggplot(data=perf, aes(x=Bench, y=Score, colour=APU)) +
+            geom_point(alpha=.3) +
+            geom_smooth(alpha=.2, size=1) +
+            ggtitle("Benchmark-Score curve per APU")
+plot(p2)
+```
+
+
+Statistics
+========================================================
+<span style="color:dimgray; font-size:.85em;">
+Set up the regression model for the different models of APUs, next are
+the intercept and the coefficients.
+</span>
+```{r, echo=FALSE}
+fit <- lm(perf$Score ~ ., perf)
+summary(fit)$coefficients[,1:3]
+```
+<br/>
+<span style="color:dimgray; font-size:.85em;">
+The Shiny project could be reached at:
+</span>
+<br/>
+https://luisurbina.shinyapps.io/shiny02
